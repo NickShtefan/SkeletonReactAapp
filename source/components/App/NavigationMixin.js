@@ -80,7 +80,7 @@ var NavigationMixin = {
       return;
     }
 
-    // Rebuild path
+    //// Rebuild path
     var path = el.pathname + el.search + (el.hash || '');
 
     event.preventDefault();
