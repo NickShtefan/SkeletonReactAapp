@@ -19,10 +19,6 @@ var CHANGE_EVENT = 'change';
 var pages = {};
 var loading = false;
 
-if (__SERVER__) {
-  pages['/'] = {title: 'Home Page'};
-  pages['/privacy'] = {title: 'Privacy Policy'};
-}
 
 var AppStore = assign({}, EventEmitter.prototype, {
 
@@ -49,6 +45,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
    * @returns {Boolean} Indication if we've emitted an event.
    */
   emitChange() {
+   //   console.log(this.emit(CHANGE_EVENT),"CHANGE_EVENT");
     return this.emit(CHANGE_EVENT);
   },
 

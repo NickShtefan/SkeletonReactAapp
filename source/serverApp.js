@@ -7,8 +7,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var React = require('react');
-//var routes = require('./routes/index');
-//var users = require('./routes/users');
+var routes = require('./routes/index');
+var users = require('./routes/users');
 
 var Dispatcher = require( './dispatcher/Dispatcher');
 var ActionTypes = require( './constants/ActionTypes');
@@ -21,9 +21,9 @@ server.use(express.static(path.join(__dirname)));
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 server.use(logger('dev'));
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: false }));
-server.use(cookieParser());
+//server.use(bodyParser.json());
+//server.use(bodyParser.urlencoded({ extended: false }));
+//server.use(cookieParser());
 
 
 //server.use('/', routes);
@@ -43,10 +43,9 @@ server.get('/api/page/*', function(req, res) {
 
 // The top-level React component + HTML template for it
 var App = React.createFactory(require('./components/App'));
+//var App = React.createFactory(require('./routes/reactRoute'));
 var templateFile = path.join(__dirname, 'templates/index.html');
 var template = _.template(fs.readFileSync(templateFile, 'utf8'));
-
-//server.set('view engine', 'jade');
 
 
 
@@ -54,58 +53,36 @@ server.get('*', function(req, res) {
     var data = {description: ''};
     var app = new App({
         path: req.path,
-        onSetTitle: function(title) { data.title = title; },
+        onSetTitle: function(title) { data.title = title;},
         onSetMeta: function(name, content) { data[name] = content; },
         onPageNotFound: function() { res.status(404); }
     });
 
     data.body = React.renderToString(app);
     var html = template(data);
-
     res.send(html);
 
 });
 
 
-// Load pages from the `/src/content/` folder into the AppStore
+// Load pages from the `/fakeDB/pages` folder into the AppStore
 (function() {
     var assign = require('react/lib/Object.assign');
-    var fm = require('front-matter');
-    var jade = require('jade');
-    var sourceDir = path.join(__dirname, './content');
-    var getFiles = function(dir) {
+    var sourcePages = require('./fakeDB/pages');
+    var getPages = function() {
         var pages = [];
-        fs.readdirSync(dir).forEach(function(file) {
-            var stat = fs.statSync(path.join(dir, file));
-            if (stat && stat.isDirectory()) {
-                pages = pages.concat(getFiles(file));
-            } else {
-                // Convert the file to a Page object
-                var filename = path.join(dir, file);
-                var url = filename.
-                    substr(sourceDir.length, filename.length - sourceDir.length - 5)
-                    .replace('\\', '/');
-                if (url.indexOf('/index', url.length - 6) !== -1) {
-                    url = url.substr(0, url.length - (url.length > 6 ? 6 : 5));
-                }
-                var source = fs.readFileSync(filename, 'utf8');
-
-
-                var content = fm(source);
-
-                var html = jade.render(content.body, null, '  ');
-                var page = assign({}, {path: url, body: html}, content.attributes);
-                Dispatcher.handleServerAction({
-                    actionType: ActionTypes.LOAD_PAGE,
-                    path: url,
-                    page: page
-                });
-
-            }
-        });
+        for(var i in sourcePages) {
+            var attr = sourcePages[i];
+            var page = assign({}, {path: attr.path, body: attr.body}, attr.attributes);
+            Dispatcher.handleServerAction({
+                actionType: ActionTypes.LOAD_PAGE,
+                path: attr.path,
+                page: page
+            });
+        }
         return pages;
     };
-    return getFiles(sourceDir);
+    return getPages(sourcePages);
 })();
 
 
