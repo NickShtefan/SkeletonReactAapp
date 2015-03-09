@@ -19,9 +19,9 @@ var template = _.template(fs.readFileSync(templateFile, 'utf8'));
 
 // The top-level React component + HTML template for it
 
-// Load pages from the `/fakeDB/pages` folder into the AppStore
-module.exports = function(answer) {
 
+module.exports = function(answer) {
+// Load pages from the `/fakeDB/pages` folder into the AppStore
     (function () {
         var assign = require('react/lib/Object.assign');
         var sourcePages = require('../fakeDB/pages');
