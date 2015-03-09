@@ -29,7 +29,6 @@ export default React.createClass({
   },
 
   render() {
-      console.log(this.props.path);
     var page = AppStore.getPage(this.props.path);
     invariant(page !== undefined, 'Failed to load page content.');
     this.props.onSetTitle(page.title);
