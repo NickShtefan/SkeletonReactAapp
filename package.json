@@ -20,7 +20,9 @@
     "morgan": "~1.5.1",
     "react": "^0.12.2",
     "serve-favicon": "~2.2.0",
-    "superagent": "^0.21.0"
+    "superagent": "^0.21.0",
+    "lodash": "^3.5.0",
+    "front-matter": "^1.0.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^1.2.0",
