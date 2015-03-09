@@ -22,7 +22,7 @@
     "serve-favicon": "~2.2.0",
     "superagent": "^0.21.0",
     "lodash": "^3.5.0",
-    "front-matter": "^1.0.0"
+    "front-matter": "^1.0.0",
     "superagent": "^0.21.0",
     "mongoose": "^3.8.24",
     "connect-mongo": "^0.7.0",
